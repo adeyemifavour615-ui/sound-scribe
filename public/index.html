@@ -26,7 +26,7 @@
             overflow: hidden;
         }
 
-        /* --- Left Navigation Sidebar --- */
+        /* --- Left Side Responsive Navigation Sidebar Menu Panel --- */
         .sidebar {
             width: 240px;
             background-color: var(--bg-sidebar);
@@ -36,13 +36,15 @@
             padding: 20px 0;
             box-sizing: border-box;
             flex-shrink: 0;
+            transition: transform 0.3s ease;
+            z-index: 100;
         }
 
         .logo-section {
             padding: 0 24px 30px 24px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
         }
 
         .logo-section h2 {
@@ -50,6 +52,16 @@
             margin: 0;
             font-size: 1.5rem;
             letter-spacing: 1px;
+        }
+
+        .close-sidebar-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
         }
 
         .menu-group {
@@ -76,6 +88,7 @@
             font-weight: 600;
             transition: color 0.2s, background-color 0.2s;
             border-left: 4px solid transparent;
+            cursor: pointer;
         }
 
         .menu-item:hover, .menu-item.active {
@@ -92,16 +105,17 @@
             margin-right: 12px;
         }
 
-        /* --- Main App Frame Layout --- */
+        /* --- Main App Frame Canvas Container Viewports --- */
         .main-frame {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
+            width: 100%;
         }
 
-        /* --- Top Universal Header Navbar --- */
+        /* --- Universal Top Header Application Navbar --- */
         .top-navbar {
             height: 70px;
             background-color: var(--bg-master);
@@ -109,14 +123,24 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
+            padding: 0 24px;
             box-sizing: border-box;
+            gap: 15px;
+        }
+
+        .hamburger-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
         .search-wrapper {
             position: relative;
-            max-width: 500px;
-            width: 100%;
+            flex-grow: 1;
+            max-width: 400px;
         }
 
         .search-wrapper input {
@@ -146,7 +170,7 @@
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .nav-link {
@@ -154,6 +178,7 @@
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .nav-link:hover {
@@ -173,79 +198,66 @@
             align-items: center;
             gap: 6px;
             transition: background-color 0.2s;
+            white-space: nowrap;
         }
 
-        .btn-upload:hover {
-            background-color: var(--brand-orange-hover);
-        }
-
-        /* --- Scrollable Content Feed View --- */
+        /* --- Scrollable Content Deck Panels --- */
         .content-feed {
             flex-grow: 1;
-            padding: 30px 40px 120px 40px;
+            padding: 24px;
             overflow-y: auto;
             box-sizing: border-box;
         }
 
-        /* --- Promo Banner Carousel Frame --- */
+        /* --- Promo Hero Display Banner Card --- */
         .promo-banner {
             background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 100%), 
                         url('https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1200') no-repeat center center;
             background-size: cover;
             border-radius: 12px;
-            padding: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 35px;
+            padding: 30px;
+            margin-bottom: 30px;
             border: 1px solid var(--border-color);
         }
 
         .banner-text h2 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin: 0 0 10px 0;
             font-weight: 800;
         }
 
-        .banner-text h2 span {
-            color: var(--brand-orange);
-        }
+        .banner-text h2 span { color: var(--brand-orange); }
 
         .banner-text p {
             color: var(--text-muted);
             margin: 0 0 20px 0;
             max-width: 500px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             line-height: 1.5;
         }
 
         .btn-banner-action {
             background-color: var(--brand-orange);
             color: black;
-            padding: 14px 28px;
+            padding: 10px 20px;
             border-radius: 25px;
             font-weight: bold;
             text-decoration: none;
             display: inline-block;
-            transition: background-color 0.2s;
+            font-size: 0.9rem;
         }
 
-        .btn-banner-action:hover {
-            background-color: var(--brand-orange-hover);
-        }
-
-        /* --- Horizontal Categories Filter Row --- */
+        /* --- Genre Category Navigation Slide Filters Row --- */
         .filter-row {
             display: flex;
             gap: 10px;
             overflow-x: auto;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
             margin-bottom: 30px;
+            scrollbar-width: none;
         }
 
-        .filter-row::-webkit-scrollbar {
-            display: none;
-        }
+        .filter-row::-webkit-scrollbar { display: none; }
 
         .pill {
             background-color: #161616;
@@ -257,7 +269,7 @@
             cursor: pointer;
             white-space: nowrap;
             border: 1px solid var(--border-color);
-            transition: background-color 0.2s, border-color 0.2s;
+            transition: all 0.2s;
         }
 
         .pill:hover, .pill.active {
@@ -266,41 +278,20 @@
             border-color: var(--brand-orange);
         }
 
-        /* --- Structured Section Feed Rows --- */
-        .feed-section {
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+        .feed-section { margin-bottom: 40px; }
 
         .section-header h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin: 0;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .view-all {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .view-all:hover {
-            color: var(--text-main);
-        }
-
-        /* --- Audiomack Style Content Square Grid --- */
+        /* --- Fully Fluid Responsive Flex Grid Deck Layouts --- */
         .music-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 20px;
         }
 
@@ -311,9 +302,7 @@
             cursor: pointer;
         }
 
-        .music-card:hover {
-            transform: translateY(-4px);
-        }
+        .music-card:hover { transform: translateY(-4px); }
 
         .card-artwork-wrapper {
             position: relative;
@@ -322,8 +311,8 @@
             border-radius: 6px;
             overflow: hidden;
             background-color: #222;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .card-artwork-wrapper img {
@@ -351,7 +340,7 @@
             white-space: nowrap;
         }
 
-        /* --- Full Screen Overlay Player Modal --- */
+        /* --- Full View Overlays Track Playback Modals Modifiers --- */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.95);
@@ -359,8 +348,8 @@
         }
 
         .modal-content {
-            background-color: #141414; padding: 30px; border-radius: 12px;
-            text-align: center; max-width: 380px; width: 90%; border: 1px solid var(--border-color);
+            background-color: #141414; padding: 25px; border-radius: 12px;
+            text-align: center; max-width: 340px; width: 85%; border: 1px solid var(--border-color);
             position: relative;
         }
 
@@ -369,59 +358,75 @@
             color: var(--text-muted); cursor: pointer; background: none; border: none;
         }
 
-        .close-btn:hover { color: white; }
-
         .modal-img { 
-            width: 240px; height: 240px; object-fit: cover; 
+            width: 200px; height: 200px; object-fit: cover; 
             border-radius: 8px; margin-bottom: 20px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6); 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
-        .modal-title { font-size: 1.4rem; margin: 0 0 5px 0; font-weight: bold; }
-        .modal-artist { color: var(--text-muted); font-size: 1rem; margin: 0 0 25px 0; }
-        
+        .modal-title { font-size: 1.3rem; margin: 0 0 5px 0; font-weight: bold; }
+        .modal-artist { color: var(--text-muted); font-size: 0.95rem; margin: 0 0 20px 0; }
         .modal-content audio { width: 100%; margin-bottom: 20px; }
         
         .btn-download-action {
-            display: inline-block; width: 100%; background-color: var(--brand-orange); color: black;
+            display: block; width: 100%; background-color: var(--brand-orange); color: black;
             padding: 12px; border-radius: 25px; text-decoration: none; font-weight: bold; box-sizing: border-box;
-            transition: background-color 0.2s;
-            cursor: pointer;
-            text-align: center;
-            border: none;
-            font-size: 0.95rem;
+            border: none; font-size: 0.95rem; cursor: pointer; transition: background-color 0.2s;
         }
 
-        .btn-download-action:hover { background-color: var(--brand-orange-hover); }
+        /* --- Responsive Structural Engine Media Breakpoints --- */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: 0; top: 0; bottom: 0;
+                transform: translateX(-100%);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .close-sidebar-btn, .hamburger-menu { display: block; }
+            .top-navbar { padding: 0 16px; }
+            .content-feed { padding: 16px; }
+            .promo-banner { padding: 20px; margin-bottom: 20px; }
+            .banner-text h2 { font-size: 1.4rem; }
+            .banner-text p { font-size: 0.9rem; }
+        }
+
+        @media (max-width: 480px) {
+            .nav-actions .nav-link { display: none; }
+            .music-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 12px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="logo-section">
             <h2>soundscribe</h2>
+            <button class="close-sidebar-btn" onclick="toggleSidebar()">×</button>
         </div>
         
         <div class="menu-group">
             <div class="menu-title">Browse</div>
-            <a href="/" class="menu-item active"><span>🔥</span> Discover</a>
-            <a href="#" class="menu-item"><span>📈</span> Charts</a>
-            <a href="#" class="menu-item"><span>🎶</span> Playlists</a>
-            <a href="#" class="menu-item"><span>📢</span> Feed</a>
+            <div class="menu-item active" id="nav-discover" onclick="switchView('discover')"><span>🔥</span> Discover</div>
+            <div class="menu-item" id="nav-charts"><span>📈</span> Charts</div>
+            <div class="menu-item" id="nav-playlists"><span>🎶</span> Playlists</div>
         </div>
 
         <div class="menu-group">
             <div class="menu-title">Library</div>
-            <a href="#" class="menu-item"><span>🎧</span> My Library</a>
+            <div class="menu-item" id="nav-library" onclick="switchView('library')"><span>🎧</span> My Library</div>
         </div>
     </div>
 
     <div class="main-frame">
         
         <div class="top-navbar">
+            <button class="hamburger-menu" onclick="toggleSidebar()">☰</button>
             <div class="search-wrapper">
                 <span class="search-icon">🔍</span>
-                <input type="text" placeholder="Search for artists, songs, albums...">
+                <input type="text" placeholder="Search tracks, music configurations...">
             </div>
             <div class="nav-actions">
                 <a href="#" class="nav-link">Sign In</a>
@@ -431,35 +436,41 @@
 
         <div class="content-feed">
             
-            <div class="promo-banner">
-                <div class="banner-text">
-                    <h2>The music platform <span>empowering artists</span></h2>
-                    <p>Sound Scribe is an independent audio deployment deck hosting modern records directly from distributed cloud repositories.</p>
-                    <a href="/admin.html" class="btn-banner-action">Manage Core Inventory</a>
-                </div>
-            </div>
-
-            <div class="filter-row">
-                <div class="pill active" onclick="filterGenre('All', this)">All</div>
-                <div class="pill" onclick="filterGenre('Afrosounds', this)">Afrosounds</div>
-                <div class="pill" onclick="filterGenre('Hip-Hop/Rap', this)">Hip-Hop/Rap</div>
-                <div class="pill" onclick="filterGenre('Latin', this)">Latin</div>
-                <div class="pill" onclick="filterGenre('Jazz/Blues', this)">Jazz/Blues</div>
-                <div class="pill" onclick="filterGenre('Caribbean', this)">Caribbean</div>
-                <div class="pill" onclick="filterGenre('Pop', this)">Pop</div>
-                <div class="pill" onclick="filterGenre('R&B', this)">R&B</div>
-                <div class="pill" onclick="filterGenre('Gospel', this)">Gospel</div>
-                <div class="pill" onclick="filterGenre('Electronic', this)">Electronic</div>
-                <div class="pill" onclick="filterGenre('Rock', this)">Rock</div>
-            </div>
-
-            <div class="feed-section">
-                <div class="section-header">
-                    <h3 id="section-title">Trending Songs</h3>
-                    <a href="#" class="view-all">VIEW ALL</a>
-                </div>
-                <div class="music-grid" id="music-grid">
+            <div id="discover-view">
+                <div class="promo-banner">
+                    <div class="banner-text">
+                        <h2>The music platform <span>empowering artists</span></h2>
+                        <p>Stream directly and securely download tracking assets straight into your platform client frame profiles.</p>
+                        <a href="/admin.html" class="btn-banner-action">Manage Library</a>
                     </div>
+                </div>
+
+                <div class="filter-row">
+                    <div class="pill active" onclick="filterGenre('All', this)">All</div>
+                    <div class="pill" onclick="filterGenre('Afrosounds', this)">Afrosounds</div>
+                    <div class="pill" onclick="filterGenre('Hip-Hop/Rap', this)">Hip-Hop/Rap</div>
+                    <div class="pill" onclick="filterGenre('Latin', this)">Latin</div>
+                    <div class="pill" onclick="filterGenre('Jazz/Blues', this)">Jazz/Blues</div>
+                    <div class="pill" onclick="filterGenre('Pop', this)">Pop</div>
+                    <div class="pill" onclick="filterGenre('R&B', this)">R&B</div>
+                </div>
+
+                <div class="feed-section">
+                    <div class="section-header">
+                        <h3 id="section-title">Trending Songs</h3>
+                    </div>
+                    <div class="music-grid" id="music-grid"></div>
+                </div>
+            </div>
+
+            <div id="library-view" style="display: none;">
+                <div class="feed-section">
+                    <div class="section-header">
+                        <h3>🎧 My Offline Library</h3>
+                    </div>
+                    <p id="library-empty-msg" style="color: var(--text-muted); margin-top: 10px;">No tracks downloaded to this device library shelf yet.</p>
+                    <div class="music-grid" id="library-grid"></div>
+                </div>
             </div>
 
         </div>
@@ -472,17 +483,26 @@
             <div class="modal-title" id="modalTitle">Song Title</div>
             <div class="modal-artist" id="modalArtist">Artist Name</div>
             <audio id="modalAudio" controls></audio>
-            <button class="btn-download-action" id="modalDownload" onclick="downloadAndCacheTrack()">💾 Download & Keep Offline</button>
+            <button class="btn-download-action" id="modalDownload" onclick="downloadAndCacheTrack()">💾 Download & Save to Library</button>
         </div>
     </div>
 
     <script>
-        // --- Service Worker Installation Registration ---
+        // --- 1. Boot up IndexedDB Object Storage Structures ---
+        let db;
+        const request = indexedDB.open("SoundScribeStorage", 1);
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            if (!db.objectStoreNames.contains("savedSongs")) {
+                db.createObjectStore("savedSongs", { keyPath: "_id" });
+            }
+        };
+        request.onsuccess = (e) => { db = e.target.result; };
+
+        // --- 2. Register Platform Service Worker Framework ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('Offline System Worker Ready.'))
-                    .catch(err => console.log('Offline worker error:', err));
+                navigator.serviceWorker.register('/sw.js').catch(err => console.error(err));
             });
         }
 
@@ -491,33 +511,40 @@
 
         window.onload = loadMusicLibrary;
 
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Handles view transitions between main tabs seamlessly
+        function switchView(viewName) {
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            if (viewName === 'discover') {
+                document.getElementById('nav-discover').classList.add('active');
+                document.getElementById('discover-view').style.display = 'block';
+                document.getElementById('library-view').style.display = 'none';
+                loadMusicLibrary();
+            } else if (viewName === 'library') {
+                document.getElementById('nav-library').classList.add('active');
+                document.getElementById('discover-view').style.display = 'none';
+                document.getElementById('library-view').style.display = 'block';
+                renderOfflineLibrary();
+            }
+            if (window.innerWidth <= 768) toggleSidebar(); 
+        }
+
         async function loadMusicLibrary() {
             try {
                 const response = await fetch('/api/songs');
                 allSongs = await response.json();
-                displaySongs(allSongs);
+                displaySongs(allSongs, 'music-grid');
             } catch (error) {
-                // Offline fallback: try to load data from Service Worker Cache if network fails
-                if ('caches' in window) {
-                    caches.match('/api/songs').then(async (cachedResponse) => {
-                        if (cachedResponse) {
-                            allSongs = await cachedResponse.json();
-                            displaySongs(allSongs);
-                        } else {
-                            document.getElementById('music-grid').innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">You are currently offline, and no cached media tracks were found.</p>`;
-                        }
-                    });
-                }
+                // If network drops, automatically render whatever is locally available on disk
+                if (db) renderOfflineLibrary(true);
             }
         }
 
-        function displaySongs(songsToRender) {
-            const grid = document.getElementById('music-grid');
-            if (songsToRender.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">No active tracks found inside this category layout.</p>`;
-                return;
-            }
-
+        function displaySongs(songsToRender, targetGridId) {
+            const grid = document.getElementById(targetGridId);
             grid.innerHTML = '';
             songsToRender.forEach(song => {
                 const card = document.createElement('div');
@@ -527,7 +554,7 @@
                     <div class="card-artwork-wrapper">
                         <img src="${song.coverUrl}" alt="Cover Art" onerror="this.src='https://via.placeholder.com/200?text=No+Cover'">
                     </div>
-                    <p class="card-title" title="${song.title}">${song.title}</p>
+                    <p class="card-title">${song.title}</p>
                     <p class="card-subtext">${song.artist}</p>
                 `;
                 grid.appendChild(card);
@@ -537,15 +564,8 @@
         function filterGenre(genre, element) {
             document.querySelectorAll('.pill').forEach(pill => pill.classList.remove('active'));
             element.classList.add('active');
-            
             document.getElementById('section-title').innerText = genre === 'All' ? 'Trending Songs' : `${genre} Tracks`;
-
-            if (genre === 'All') {
-                displaySongs(allSongs);
-            } else {
-                const filtered = allSongs.filter(song => song.genre === genre);
-                displaySongs(filtered);
-            }
+            displaySongs(genre === 'All' ? allSongs : allSongs.filter(s => s.genre === genre), 'music-grid');
         }
 
         function openModal(song) {
@@ -553,43 +573,61 @@
             document.getElementById('modalImg').src = song.coverUrl;
             document.getElementById('modalTitle').innerText = song.title;
             document.getElementById('modalArtist').innerText = song.artist;
-            
-            const audio = document.getElementById('modalAudio');
-            audio.src = song.audioUrl;
-            
+            document.getElementById('modalAudio').src = song.audioUrl;
             document.getElementById('trackModal').style.display = 'flex';
-            audio.play().catch(() => {});
+            document.getElementById('modalAudio').play().catch(() => {});
         }
 
+        // Cache files inside browser service worker structures and maps info data inside IndexedDB
         async function downloadAndCacheTrack() {
             if (!currentSong) return;
-            
-            const downloadUrl = `/api/songs/download/${currentSong._id}`;
             const downloadBtn = document.getElementById('modalDownload');
-            
-            downloadBtn.innerText = "⏳ Saving track...";
+            downloadBtn.innerText = "⏳ Saving to Library...";
 
             try {
                 if ('caches' in window) {
-                    const cache = await caches.open('soundscribe-v1');
+                    const cache = await caches.open('soundscribe-v2');
                     await cache.add(currentSong.audioUrl);
                     await cache.add(currentSong.coverUrl);
                 }
 
+                if (db) {
+                    const tx = db.transaction("savedSongs", "readwrite");
+                    tx.objectStore("savedSongs").put(currentSong);
+                }
+
                 const link = document.createElement('a');
-                link.href = downloadUrl;
+                link.href = `/api/songs/download/${currentSong._id}`;
                 link.target = '_blank';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
 
-                downloadBtn.innerText = "✅ Saved Offline!";
-                setTimeout(() => { downloadBtn.innerText = "💾 Download & Keep Offline"; }, 2000);
+                downloadBtn.innerText = "✅ Saved to My Library!";
+                setTimeout(() => { downloadBtn.innerText = "💾 Download & Save to Library"; }, 2000);
             } catch (err) {
                 console.error(err);
-                downloadBtn.innerText = "❌ Offline Save Error";
-                setTimeout(() => { downloadBtn.innerText = "💾 Download & Keep Offline"; }, 2000);
+                downloadBtn.innerText = "❌ Tracking Error";
+                setTimeout(() => { downloadBtn.innerText = "💾 Download & Save to Library"; }, 2000);
             }
+        }
+
+        // Pulls records directly out from browser disk databases out into layout panels
+        function renderOfflineLibrary(fallbackToDiscoverGrid = false) {
+            if (!db) return;
+            const tx = db.transaction("savedSongs", "readonly");
+            const store = tx.objectStore("savedSongs");
+            const getAll = store.getAll();
+
+            getAll.onsuccess = () => {
+                const songs = getAll.result;
+                const gridId = fallbackToDiscoverGrid ? 'music-grid' : 'library-grid';
+                
+                if (!fallbackToDiscoverGrid) {
+                    document.getElementById('library-empty-msg').style.display = songs.length === 0 ? 'block' : 'none';
+                }
+                displaySongs(songs, gridId);
+            };
         }
 
         function closeModal() {

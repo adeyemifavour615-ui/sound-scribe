@@ -1,29 +1,25 @@
-const CACHE_NAME = 'soundscribe-v1';
+const CACHE_NAME = 'soundscribe-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/admin.html'
 ];
 
-// Install Event: Cache structural assets
+// Install Event: Pre-cache core platform layout files
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
   );
   self.skipWaiting();
 });
 
-// Activate Event: Clean up old caches
+// Activate Event: Clear older cache structures
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
+          if (key !== CACHE_NAME) return caches.delete(key);
         })
       );
     })
@@ -31,15 +27,17 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Event: Serve from cache if offline, and cache audio files dynamically
+// Fetch Interceptor: Prioritizes cached media if network fails
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
 
-  // Special strategy for audio tracking data or storage links
-  if (requestUrl.pathname.includes('/api/songs') || event.request.url.endsWith('.mp3')) {
+  // Audio streams and image assets interception pipeline
+  if (requestUrl.pathname.includes('/api/songs') || event.request.url.endsWith('.mp3') || requestUrl.hostname.includes('unsplash.com')) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
-        const fetchPromise = fetch(event.request).then((networkResponse) => {
+        if (cachedResponse) return cachedResponse;
+
+        return fetch(event.request).then((networkResponse) => {
           if (networkResponse.status === 200) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
@@ -47,17 +45,13 @@ self.addEventListener('fetch', (event) => {
             });
           }
           return networkResponse;
-        }).catch(() => {
-          return cachedResponse;
-        });
-
-        return cachedResponse || fetchPromise;
+        }).catch(() => null); // Silent fallback on complete lack of coverage
       })
     );
     return;
   }
 
-  // Default Cache-First Strategy for images/css/HTML files
+  // Core fallback infrastructure strategy for structural frames
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       return cachedResponse || fetch(event.request).then((response) => {
