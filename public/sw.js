@@ -1,11 +1,10 @@
-const CACHE_NAME = 'soundscribe-v2';
+const CACHE_NAME = 'soundscribe-cache-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/admin.html'
 ];
 
-// Install Event: Pre-cache core platform layout files
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
@@ -13,7 +12,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate Event: Clear older cache structures
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -27,31 +25,31 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch Interceptor: Prioritizes cached media if network fails
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
 
-  // Audio streams and image assets interception pipeline
+  // Dynamic Audio Media Interception Pipeline
   if (requestUrl.pathname.includes('/api/songs') || event.request.url.endsWith('.mp3') || requestUrl.hostname.includes('unsplash.com')) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) return cachedResponse;
 
         return fetch(event.request).then((networkResponse) => {
-          if (networkResponse.status === 200) {
+          // Allow caching standard tracking logs and opaque content layers (status 0) cleanly
+          if (networkResponse.status === 200 || networkResponse.status === 0) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(event.request, responseToCache);
             });
           }
           return networkResponse;
-        }).catch(() => null); // Silent fallback on complete lack of coverage
+        }).catch(() => null); 
       })
     );
     return;
   }
 
-  // Core fallback infrastructure strategy for structural frames
+  // Fallback layout architecture strategy routing handling rules
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       return cachedResponse || fetch(event.request).then((response) => {

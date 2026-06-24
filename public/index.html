@@ -26,7 +26,7 @@
             overflow: hidden;
         }
 
-        /* --- Left Side Responsive Navigation Sidebar Menu Panel --- */
+        /* --- Sidebar Navigation Panel --- */
         .sidebar {
             width: 240px;
             background-color: var(--bg-sidebar);
@@ -36,8 +36,8 @@
             padding: 20px 0;
             box-sizing: border-box;
             flex-shrink: 0;
-            transition: transform 0.3s ease;
-            z-index: 100;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999;
         }
 
         .logo-section {
@@ -61,12 +61,9 @@
             color: white;
             font-size: 1.8rem;
             cursor: pointer;
-            line-height: 1;
         }
 
-        .menu-group {
-            margin-bottom: 25px;
-        }
+        .menu-group { margin-bottom: 25px; }
 
         .menu-title {
             font-size: 0.75rem;
@@ -101,11 +98,9 @@
             color: var(--brand-orange);
         }
 
-        .menu-item span {
-            margin-right: 12px;
-        }
+        .menu-item span { margin-right: 12px; }
 
-        /* --- Main App Frame Canvas Container Viewports --- */
+        /* --- Main Frame Workspace Viewport --- */
         .main-frame {
             flex-grow: 1;
             display: flex;
@@ -113,9 +108,10 @@
             height: 100vh;
             overflow: hidden;
             width: 100%;
+            position: relative;
         }
 
-        /* --- Universal Top Header Application Navbar --- */
+        /* --- Top Responsive Header Navigation Bar --- */
         .top-navbar {
             height: 70px;
             background-color: var(--bg-master);
@@ -154,11 +150,6 @@
             box-sizing: border-box;
         }
 
-        .search-wrapper input:focus {
-            outline: none;
-            border-color: var(--brand-orange);
-        }
-
         .search-icon {
             position: absolute;
             left: 15px;
@@ -178,11 +169,6 @@
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .nav-link:hover {
-            color: var(--brand-orange);
         }
 
         .btn-upload {
@@ -197,11 +183,9 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: background-color 0.2s;
-            white-space: nowrap;
         }
 
-        /* --- Scrollable Content Deck Panels --- */
+        /* --- Scrollable Window Canvas Feed --- */
         .content-feed {
             flex-grow: 1;
             padding: 24px;
@@ -209,7 +193,7 @@
             box-sizing: border-box;
         }
 
-        /* --- Promo Hero Display Banner Card --- */
+        /* --- Promo Card Hero Banner --- */
         .promo-banner {
             background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 100%), 
                         url('https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1200') no-repeat center center;
@@ -247,7 +231,7 @@
             font-size: 0.9rem;
         }
 
-        /* --- Genre Category Navigation Slide Filters Row --- */
+        /* --- Horizontal Category Sliders --- */
         .filter-row {
             display: flex;
             gap: 10px;
@@ -269,26 +253,23 @@
             cursor: pointer;
             white-space: nowrap;
             border: 1px solid var(--border-color);
-            transition: all 0.2s;
         }
 
-        .pill:hover, .pill.active {
+        .pill.active {
             background-color: var(--brand-orange);
             color: black;
             border-color: var(--brand-orange);
         }
 
         .feed-section { margin-bottom: 40px; }
-
         .section-header h3 {
             font-size: 1.3rem;
-            margin: 0;
+            margin: 0 0 20px 0;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        /* --- Fully Fluid Responsive Flex Grid Deck Layouts --- */
+        /* --- Fully Fluid CSS Breakpoint Grid Deck --- */
         .music-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -297,12 +278,8 @@
 
         .music-card {
             background-color: transparent;
-            border-radius: 6px;
-            transition: transform 0.2s;
             cursor: pointer;
         }
-
-        .music-card:hover { transform: translateY(-4px); }
 
         .card-artwork-wrapper {
             position: relative;
@@ -340,11 +317,11 @@
             white-space: nowrap;
         }
 
-        /* --- Full View Overlays Track Playback Modals Modifiers --- */
+        /* --- Immersive Player Modal UI Screen Overlay --- */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.95);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
+            display: none; justify-content: center; align-items: center; z-index: 100000;
         }
 
         .modal-content {
@@ -361,7 +338,6 @@
         .modal-img { 
             width: 200px; height: 200px; object-fit: cover; 
             border-radius: 8px; margin-bottom: 20px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
         .modal-title { font-size: 1.3rem; margin: 0 0 5px 0; font-weight: bold; }
@@ -371,10 +347,14 @@
         .btn-download-action {
             display: block; width: 100%; background-color: var(--brand-orange); color: black;
             padding: 12px; border-radius: 25px; text-decoration: none; font-weight: bold; box-sizing: border-box;
-            border: none; font-size: 0.95rem; cursor: pointer; transition: background-color 0.2s;
+            border: none; font-size: 0.95rem; cursor: pointer;
         }
 
-        /* --- Responsive Structural Engine Media Breakpoints --- */
+        /* --- Complete Multi-Device UI Breakpoints Configuration --- */
+        @media (max-width: 992px) {
+            .music-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -382,19 +362,25 @@
                 transform: translateX(-100%);
             }
             .sidebar.open { transform: translateX(0); }
-            .close-sidebar-btn, .hamburger-menu { display: block; }
+            .close-sidebar-btn { display: block; }
+            .hamburger-menu { display: block; }
             .top-navbar { padding: 0 16px; }
             .content-feed { padding: 16px; }
-            .promo-banner { padding: 20px; margin-bottom: 20px; }
-            .banner-text h2 { font-size: 1.4rem; }
-            .banner-text p { font-size: 0.9rem; }
+            
+            .music-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 12px;
+            }
         }
 
         @media (max-width: 480px) {
             .nav-actions .nav-link { display: none; }
+            .promo-banner { padding: 20px; border-radius: 8px; }
+            .banner-text h2 { font-size: 1.3rem; }
+            .banner-text p { font-size: 0.85rem; }
             .music-grid {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 12px;
+                grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+                gap: 10px;
             }
         }
     </style>
@@ -421,12 +407,11 @@
     </div>
 
     <div class="main-frame">
-        
         <div class="top-navbar">
             <button class="hamburger-menu" onclick="toggleSidebar()">☰</button>
             <div class="search-wrapper">
                 <span class="search-icon">🔍</span>
-                <input type="text" placeholder="Search tracks, music configurations...">
+                <input type="text" placeholder="Search music...">
             </div>
             <div class="nav-actions">
                 <a href="#" class="nav-link">Sign In</a>
@@ -435,12 +420,11 @@
         </div>
 
         <div class="content-feed">
-            
             <div id="discover-view">
                 <div class="promo-banner">
                     <div class="banner-text">
                         <h2>The music platform <span>empowering artists</span></h2>
-                        <p>Stream directly and securely download tracking assets straight into your platform client frame profiles.</p>
+                        <p>Stream records and cleanly save track profiles directly down into your platform device library container.</p>
                         <a href="/admin.html" class="btn-banner-action">Manage Library</a>
                     </div>
                 </div>
@@ -456,23 +440,18 @@
                 </div>
 
                 <div class="feed-section">
-                    <div class="section-header">
-                        <h3 id="section-title">Trending Songs</h3>
-                    </div>
+                    <div class="section-header"><h3>Trending Songs</h3></div>
                     <div class="music-grid" id="music-grid"></div>
                 </div>
             </div>
 
             <div id="library-view" style="display: none;">
                 <div class="feed-section">
-                    <div class="section-header">
-                        <h3>🎧 My Offline Library</h3>
-                    </div>
+                    <div class="section-header"><h3>🎧 My Offline Library</h3></div>
                     <p id="library-empty-msg" style="color: var(--text-muted); margin-top: 10px;">No tracks downloaded to this device library shelf yet.</p>
                     <div class="music-grid" id="library-grid"></div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -488,7 +467,7 @@
     </div>
 
     <script>
-        // --- 1. Boot up IndexedDB Object Storage Structures ---
+        // --- 1. Boot up IndexedDB Core Object Stores ---
         let db;
         const request = indexedDB.open("SoundScribeStorage", 1);
         request.onupgradeneeded = (e) => {
@@ -499,10 +478,12 @@
         };
         request.onsuccess = (e) => { db = e.target.result; };
 
-        // --- 2. Register Platform Service Worker Framework ---
+        // --- 2. Initialize Platform Service Workers Engine ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(err => console.error(err));
+                navigator.serviceWorker.register('/sw.js')
+                    .then(() => console.log("Service Worker Active"))
+                    .catch(err => console.error("Worker Registration Failed", err));
             });
         }
 
@@ -515,7 +496,6 @@
             document.getElementById('sidebar').classList.toggle('open');
         }
 
-        // Handles view transitions between main tabs seamlessly
         function switchView(viewName) {
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
             if (viewName === 'discover') {
@@ -529,7 +509,9 @@
                 document.getElementById('library-view').style.display = 'block';
                 renderOfflineLibrary();
             }
-            if (window.innerWidth <= 768) toggleSidebar(); 
+            if (window.innerWidth <= 768 && document.getElementById('sidebar').classList.contains('open')) {
+                toggleSidebar(); 
+            }
         }
 
         async function loadMusicLibrary() {
@@ -538,7 +520,6 @@
                 allSongs = await response.json();
                 displaySongs(allSongs, 'music-grid');
             } catch (error) {
-                // If network drops, automatically render whatever is locally available on disk
                 if (db) renderOfflineLibrary(true);
             }
         }
@@ -552,7 +533,7 @@
                 card.onclick = () => openModal(song);
                 card.innerHTML = `
                     <div class="card-artwork-wrapper">
-                        <img src="${song.coverUrl}" alt="Cover Art" onerror="this.src='https://via.placeholder.com/200?text=No+Cover'">
+                        <img src="${song.coverUrl}" alt="Cover" onerror="this.src='https://via.placeholder.com/200?text=No+Cover'">
                     </div>
                     <p class="card-title">${song.title}</p>
                     <p class="card-subtext">${song.artist}</p>
@@ -564,7 +545,6 @@
         function filterGenre(genre, element) {
             document.querySelectorAll('.pill').forEach(pill => pill.classList.remove('active'));
             element.classList.add('active');
-            document.getElementById('section-title').innerText = genre === 'All' ? 'Trending Songs' : `${genre} Tracks`;
             displaySongs(genre === 'All' ? allSongs : allSongs.filter(s => s.genre === genre), 'music-grid');
         }
 
@@ -578,24 +558,31 @@
             document.getElementById('modalAudio').play().catch(() => {});
         }
 
-        // Cache files inside browser service worker structures and maps info data inside IndexedDB
+        // Caching Architecture: Leverages mixed CORS tracking requests to ensure secure offloading down onto browser layouts
         async function downloadAndCacheTrack() {
             if (!currentSong) return;
             const downloadBtn = document.getElementById('modalDownload');
             downloadBtn.innerText = "⏳ Saving to Library...";
 
             try {
+                // A. Request Cache Open directly through the platform system references
                 if ('caches' in window) {
-                    const cache = await caches.open('soundscribe-v2');
-                    await cache.add(currentSong.audioUrl);
-                    await cache.add(currentSong.coverUrl);
+                    const cache = await caches.open('soundscribe-cache-v1');
+                    
+                    // Request resource strings utilizing mixed mode settings to avoid cross-domain storage drops
+                    await cache.add(new Request(currentSong.audioUrl, { mode: 'no-cors' }));
+                    if (currentSong.coverUrl) {
+                        await cache.add(new Request(currentSong.coverUrl, { mode: 'no-cors' }));
+                    }
                 }
 
+                // B. Save structural metadata inside the IndexedDB profile store
                 if (db) {
                     const tx = db.transaction("savedSongs", "readwrite");
                     tx.objectStore("savedSongs").put(currentSong);
                 }
 
+                // C. Call client download file stream pipeline fallbacks
                 const link = document.createElement('a');
                 link.href = `/api/songs/download/${currentSong._id}`;
                 link.target = '_blank';
@@ -606,13 +593,12 @@
                 downloadBtn.innerText = "✅ Saved to My Library!";
                 setTimeout(() => { downloadBtn.innerText = "💾 Download & Save to Library"; }, 2000);
             } catch (err) {
-                console.error(err);
-                downloadBtn.innerText = "❌ Tracking Error";
+                console.error("Local Storage Interruption Encountered:", err);
+                downloadBtn.innerText = "❌ Offline Save Error";
                 setTimeout(() => { downloadBtn.innerText = "💾 Download & Save to Library"; }, 2000);
             }
         }
 
-        // Pulls records directly out from browser disk databases out into layout panels
         function renderOfflineLibrary(fallbackToDiscoverGrid = false) {
             if (!db) return;
             const tx = db.transaction("savedSongs", "readonly");
