@@ -98,9 +98,8 @@ app.get('/api/songs/download/:id', async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`);
     res.setHeader('Content-Type', 'audio/mpeg');
 
-    // Pipe stream directly down to client pipeline
-    const webStream = response.body;
-    const nodeStream = require('stream').Readable.fromWeb(webStream);
+    // Bulletproof stream transfer from fetch web-stream down to client response pipeline
+    const nodeStream = require('stream').Readable.fromWeb(response.body);
     nodeStream.pipe(res);
 
   } catch (error) {
@@ -109,7 +108,7 @@ app.get('/api/songs/download/:id', async (req, res) => {
   }
 });
 
-// 7. Database Seeding Route (Optional backup utility)
+// 7. Database Seeding Route (Backup utility to populate sample tracks if needed)
 app.get('/api/seed', async (req, res) => {
   try {
     await Song.deleteMany({}); 

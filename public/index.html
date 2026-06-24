@@ -3,171 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Symphony - Admin Dashboard</title>
+    <title>Sound Scribe - Stream & Download</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #121212;
             color: #ffffff;
             margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #070707;
             padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #282828;
+        }
+        header h1 {
+            color: #1DB954;
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        header p {
+            color: #b3b3b3;
+            margin: 5px 0 0 0;
         }
         .container {
-            max-width: 600px;
-            margin: 30px auto;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
-        .box {
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
+        .track-card {
             background-color: #181818;
-            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-bottom: 30px;
-        }
-        h1, h2 { color: #1DB954; text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: #b3b3b3; font-size: 0.9rem; }
-        input {
-            width: 100%; padding: 10px; background-color: #282828;
-            border: 1px solid #3e3e3e; border-radius: 4px; color: white; box-sizing: border-box;
-        }
-        input:focus { outline: none; border-color: #1DB954; }
-        button {
-            width: 100%; background-color: #1DB954; color: white; border: none;
-            padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem;
-        }
-        button:hover { background-color: #1ed760; }
-        .message { text-align: center; margin-top: 15px; font-weight: bold; }
-        .nav-link { display: block; text-align: center; margin-top: 20px; color: #b3b3b3; text-decoration: none; }
-        .nav-link:hover { color: #ffffff; }
-        
-        /* Song List Styles */
-        .song-item {
-            background-color: #181818; padding: 12px; border-radius: 6px;
-            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+            padding: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
             border: 1px solid #282828;
+            display: flex;
+            flex-direction: column;
         }
-        .btn-delete {
-            background-color: #ff5555; color: white; border: none; padding: 6px 12px;
-            border-radius: 4px; cursor: pointer; font-weight: bold; width: auto;
+        .track-card:hover {
+            background-color: #282828;
+            transform: translateY(-5px);
         }
-        .btn-delete:hover { background-color: #ff3333; }
+        .cover-frame {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* Keeps it a perfect square */
+            margin-bottom: 15px;
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: #2a2a2a;
+        }
+        .cover-frame img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .track-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .track-artist {
+            color: #b3b3b3;
+            font-size: 0.9rem;
+            margin: 0 0 15px 0;
+        }
+        .action-row {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+        .btn-play {
+            background-color: #1DB954;
+            color: #ffffff;
+        }
+        .btn-play:hover { background-color: #1ed760; }
+        .btn-download {
+            background-color: #333333;
+            color: #ffffff;
+        }
+        .btn-download:hover { background-color: #444444; }
+        
+        /* Audio Player Bar */
+        .player-footer {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background-color: #181818;
+            border-top: 1px solid #282828;
+            padding: 15px 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .player-footer audio {
+            width: 100%;
+            max-width: 600px;
+        }
     </style>
 </head>
 <body>
 
+    <header>
+        <h1>SOUND SCRIBE</h1>
+        <p>Stream and download your favorite tracks freely</p>
+    </header>
+
     <div class="container">
-        <div class="box">
-            <h1>Upload Track Meta</h1>
-            <form id="songForm">
-                <div class="form-group">
-                    <label for="title">Song Title *</label>
-                    <input type="text" id="title" required placeholder="e.g., Midnight City">
-                </div>
-                <div class="form-group">
-                    <label for="artist">Artist Name</label>
-                    <input type="text" id="artist" placeholder="e.g., M83">
-                </div>
-                <div class="form-group">
-                    <label for="audioUrl">Audio File URL (Direct MP3 Link) *</label>
-                    <input type="url" id="audioUrl" required placeholder="https://example.com/song.mp3">
-                </div>
-                <div class="form-group">
-                    <label for="coverUrl">Cover Art Image URL</label>
-                    <input type="url" id="coverUrl" placeholder="https://example.com/cover.jpg">
-                </div>
-                <button type="submit">Add Song to Platform</button>
-            </form>
-            <div class="message" id="msg"></div>
-        </div>
+        <div class="library-grid" id="music-grid">
+            </div>
+    </div>
 
-        <div class="box">
-            <h2>Manage Live Library</h2>
-            <div id="admin-song-list">Loading music database...</div>
-        </div>
-
-        <a href="/" class="nav-link">← Go to Music Library</a>
+    <div class="player-footer" id="audioPlayerContainer">
+        <audio id="mainAudioPlayer" controls autoplay></audio>
     </div>
 
     <script>
-        // Fetch and display active songs with a delete trigger
-        async function fetchAdminLibrary() {
+        // Immediately fetch library elements on screen load
+        window.onload = loadMusicLibrary;
+
+        async function loadMusicLibrary() {
+            const grid = document.getElementById('music-grid');
             try {
                 const response = await fetch('/api/songs');
                 const songs = await response.json();
-                const listContainer = document.getElementById('admin-song-list');
-                
+
                 if (songs.length === 0) {
-                    listContainer.innerHTML = '<p style="color:#b3b3b3; text-align:center;">No songs currently in MongoDB.</p>';
+                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #b3b3b3;">No music files found in the archive. Check back later!</p>`;
                     return;
                 }
 
-                listContainer.innerHTML = '';
+                grid.innerHTML = ''; // Wipe loading state
                 songs.forEach(song => {
-                    const div = document.createElement('div');
-                    div.className = 'song-item';
-                    div.innerHTML = `
-                        <div>
-                            <strong>${song.title}</strong> - <span style="color:#b3b3b3;">${song.artist}</span>
+                    const card = document.createElement('div');
+                    card.className = 'track-card';
+                    card.innerHTML = `
+                        <div class="cover-frame">
+                            <img src="${song.coverUrl}" alt="Cover Art" onerror="this.src='https://via.placeholder.com/200?text=No+Cover'">
                         </div>
-                        <button class="btn-delete" onclick="deleteSong('${song._id}')">Delete</button>
+                        <p class="track-title" title="${song.title}">${song.title}</p>
+                        <p class="track-artist">${song.artist}</p>
+                        <div class="action-row">
+                            <button class="btn btn-play" onclick="playSong('${song.audioUrl}')">▶ Play</button>
+                            <a class="btn btn-download" href="/api/songs/download/${song._id}" target="_blank">💾 Save</a>
+                        </div>
                     `;
-                    listContainer.appendChild(div);
+                    grid.appendChild(card);
                 });
-            } catch (err) {
-                document.getElementById('admin-song-list').innerText = "Failed to synchronize current inventory list.";
+            } catch (error) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">Could not sync tracking interface with database server.</p>`;
             }
         }
 
-        // Send a DELETE Request to our backend API endpoint using proper backticks
-        async function deleteSong(songId) {
-            if (!confirm("Are you completely sure you want to permanently delete this track?")) return;
-
-            try {
-                const response = await fetch(`/api/songs/${songId}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    alert("Track dropped successfully from MongoDB!");
-                    fetchAdminLibrary(); // Reload the inventory list automatically
-                } else {
-                    alert("Could not remove the selected file from the database.");
-                }
-            } catch (err) {
-                alert("Network communication error during deletion task.");
-            }
+        function playSong(audioUrl) {
+            const playerContainer = document.getElementById('audioPlayerContainer');
+            const player = document.getElementById('mainAudioPlayer');
+            
+            player.src = audioUrl;
+            playerContainer.style.display = 'flex';
+            player.play().catch(err => console.log("Playback initialized, click interface context manually."));
         }
-
-        // Submit form handler
-        document.getElementById('songForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const msgDiv = document.getElementById('msg');
-            const songData = {
-                title: document.getElementById('title').value,
-                artist: document.getElementById('artist').value,
-                audioUrl: document.getElementById('audioUrl').value,
-                coverUrl: document.getElementById('coverUrl').value
-            };
-
-            const response = await fetch('/api/songs', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(songData)
-            });
-
-            if (response.ok) {
-                msgDiv.style.color = '#1DB954';
-                msgDiv.innerText = "Success: Track added directly to MongoDB!";
-                document.getElementById('songForm').reset();
-                fetchAdminLibrary(); // Instantly update the inventory list view below
-            } else {
-                msgDiv.style.color = '#ff5555';
-                msgDiv.innerText = "Error uploading tracking configuration.";
-            }
-        });
-
-        // Run automatically when the webpage fully boots up
-        window.onload = fetchAdminLibrary;
     </script>
 </body>
 </html>

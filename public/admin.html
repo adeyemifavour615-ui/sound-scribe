@@ -40,10 +40,10 @@
         .nav-link { display: block; text-align: center; margin-top: 20px; color: #b3b3b3; text-decoration: none; }
         .nav-link:hover { color: #ffffff; }
         
-        /* Song List Styles */
         .song-item {
             background-color: #181818; padding: 12px; border-radius: 6px;
             margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #282828;
         }
         .btn-delete {
             background-color: #ff5555; color: white; border: none; padding: 6px 12px;
@@ -88,7 +88,18 @@
     </div>
 
     <script>
-        // Fetch and display active songs with a delete trigger
+        // --- Privacy Protection Gate ---
+        // Change "admin123" to whatever secret password you want!
+        const token = prompt("Enter Admin Access Code to Manage Dashboard:");
+        
+        if (token !== "admin123") {
+            alert("Access Denied: Invalid password.");
+            window.location.href = "/"; // Kicks them back to the library homepage
+        } else {
+            // Only fetch backend data if password verification clears
+            fetchAdminLibrary();
+        }
+
         async function fetchAdminLibrary() {
             try {
                 const response = await fetch('/api/songs');
@@ -117,7 +128,6 @@
             }
         }
 
-        // Send a DELETE Request to our brand new API endpoint
         async function deleteSong(songId) {
             if (!confirm("Are you completely sure you want to permanently delete this track?")) return;
 
@@ -128,7 +138,7 @@
 
                 if (response.ok) {
                     alert("Track dropped successfully from MongoDB!");
-                    fetchAdminLibrary(); // Reload the list automatically
+                    fetchAdminLibrary();
                 } else {
                     alert("Could not remove the selected file.");
                 }
@@ -137,7 +147,6 @@
             }
         }
 
-        // Submit form handler
         document.getElementById('songForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const msgDiv = document.getElementById('msg');
@@ -158,15 +167,12 @@
                 msgDiv.style.color = '#1DB954';
                 msgDiv.innerText = "Success: Track added directly to MongoDB!";
                 document.getElementById('songForm').reset();
-                fetchAdminLibrary(); // Instantly update list
+                fetchAdminLibrary();
             } else {
                 msgDiv.style.color = '#ff5555';
                 msgDiv.innerText = "Error uploading tracking configuration.";
             }
         });
-
-        // Run when page boots up
-        window.onload = fetchAdminLibrary;
     </script>
 </body>
 </html>
