@@ -16,7 +16,6 @@
         }
         .container { max-width: 600px; width: 100%; display: none; margin: auto; }
         
-        /* Custom UI Login Gate Box */
         .login-gate {
             background-color: rgba(24, 24, 24, 0.95);
             padding: 40px; border-radius: 12px; border: 1px solid #333;
@@ -30,19 +29,19 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5); margin-bottom: 30px;
             border: 1px solid #282828;
         }
-        h1, h2 { color: #1DB954; text-align: center; margin-top: 0; }
+        h1, h2 { color: #ffa500; text-align: center; margin-top: 0; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; color: #b3b3b3; font-size: 0.9rem; }
-        input {
+        input, select {
             width: 100%; padding: 12px; background-color: #282828;
             border: 1px solid #3e3e3e; border-radius: 4px; color: white; box-sizing: border-box;
         }
-        input:focus { outline: none; border-color: #1DB954; }
+        input:focus, select:focus { outline: none; border-color: #ffa500; }
         button {
-            width: 100%; background-color: #1DB954; color: white; border: none;
+            width: 100%; background-color: #ffa500; color: black; border: none;
             padding: 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1rem;
         }
-        button:hover { background-color: #1ed760; }
+        button:hover { background-color: #cc8400; }
         .message { text-align: center; margin-top: 15px; font-weight: bold; }
         .nav-link { display: block; text-align: center; margin-top: 20px; color: #b3b3b3; text-decoration: none; }
         .nav-link:hover { color: #ffffff; }
@@ -54,6 +53,7 @@
         }
         .btn-delete { background-color: #ff5555; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-delete:hover { background-color: #ff3333; }
+        .tag { font-size: 0.75rem; background-color: #333; color: #ffa500; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
     </style>
 </head>
 <body>
@@ -82,6 +82,21 @@
                     <input type="text" id="artist" placeholder="e.g., M83">
                 </div>
                 <div class="form-group">
+                    <label for="genre">Select Genre *</label>
+                    <select id="genre">
+                        <option value="Afrosounds">Afrosounds</option>
+                        <option value="Hip-Hop/Rap">Hip-Hop/Rap</option>
+                        <option value="Latin">Latin</option>
+                        <option value="Jazz/Blues">Jazz/Blues</option>
+                        <option value="Caribbean">Caribbean</option>
+                        <option value="Pop">Pop</option>
+                        <option value="R&B">R&B</option>
+                        <option value="Gospel">Gospel</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Rock">Rock</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="audioUrl">Audio File URL (Direct MP3 Link) *</label>
                     <input type="url" id="audioUrl" required placeholder="https://example.com/song.mp3">
                 </div>
@@ -105,7 +120,6 @@
     <script>
         function checkAccess() {
             const entry = document.getElementById('secretField').value;
-            // Your access key remains "admin123"
             if (entry === "admin123") {
                 document.getElementById('authBox').style.display = 'none';
                 document.getElementById('dashView').style.display = 'block';
@@ -133,6 +147,7 @@
                     div.innerHTML = `
                         <div>
                             <strong>${song.title}</strong> - <span style="color:#b3b3b3;">${song.artist}</span>
+                            <span class="tag">${song.genre || 'All'}</span>
                         </div>
                         <button class="btn-delete" onclick="deleteSong('${song._id}')">Delete</button>
                     `;
@@ -155,6 +170,7 @@
             const songData = {
                 title: document.getElementById('title').value,
                 artist: document.getElementById('artist').value,
+                genre: document.getElementById('genre').value,
                 audioUrl: document.getElementById('audioUrl').value,
                 coverUrl: document.getElementById('coverUrl').value
             };
@@ -166,7 +182,7 @@
             });
 
             if (response.ok) {
-                msgDiv.style.color = '#1DB954';
+                msgDiv.style.color = '#ffa500';
                 msgDiv.innerText = "Success: Track uploaded!";
                 document.getElementById('songForm').reset();
                 fetchAdminLibrary();

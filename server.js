@@ -16,12 +16,13 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Successfully connected to MongoDB Atlas Cloud!'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// 2. Define Song Schema and Model
+// 2. Define Song Schema and Model (With Added Genre Support)
 const songSchema = new mongoose.Schema({
   title: String,
   artist: String,
   audioUrl: String,  // Link to external media/object storage
   coverUrl: String,
+  genre: { type: String, default: "All" }, // Track specific music category
   downloadCount: { type: Number, default: 0 }
 });
 
@@ -40,7 +41,7 @@ app.get('/api/songs', async (req, res) => {
 // 4. API: Add a new song (Admin Feature Form Receiver)
 app.post('/api/songs', async (req, res) => {
   try {
-    const { title, artist, audioUrl, coverUrl } = req.body;
+    const { title, artist, audioUrl, coverUrl, genre } = req.body;
 
     // Core validation
     if (!title || !audioUrl) {
@@ -51,7 +52,8 @@ app.post('/api/songs', async (req, res) => {
       title,
       artist: artist || "Unknown Artist",
       audioUrl,
-      coverUrl: coverUrl || "https://via.placeholder.com/60"
+      coverUrl: coverUrl || "https://via.placeholder.com/60",
+      genre: genre || "All"
     });
 
     await newSong.save();
@@ -105,31 +107,6 @@ app.get('/api/songs/download/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not complete download operation." });
-  }
-});
-
-// 7. Database Seeding Route (Backup utility to populate sample tracks if needed)
-app.get('/api/seed', async (req, res) => {
-  try {
-    await Song.deleteMany({}); 
-    const sampleSongs = [
-      {
-        title: "Creative Minds",
-        artist: "Bensound",
-        audioUrl: "https://www.bensound.com/bensound-music/bensound-creativeminds.mp3",
-        coverUrl: "https://www.bensound.com/bensound-img/creativeminds.jpg"
-      },
-      {
-        title: "Ukulele",
-        artist: "Bensound",
-        audioUrl: "https://www.bensound.com/bensound-music/bensound-ukulele.mp3",
-        coverUrl: "https://www.bensound.com/bensound-img/ukulele.jpg"
-      }
-    ];
-    await Song.insertMany(sampleSongs);
-    res.json({ message: "Database seeded successfully with sample tracks!" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 });
 
