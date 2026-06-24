@@ -9,8 +9,7 @@
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #121212;
             color: #ffffff;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
         }
         header {
             background-color: #070707;
@@ -18,20 +17,10 @@
             text-align: center;
             border-bottom: 1px solid #282828;
         }
-        header h1 {
-            color: #1DB954;
-            margin: 0;
-            font-size: 2.2rem;
-        }
-        header p {
-            color: #b3b3b3;
-            margin: 5px 0 0 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+        header h1 { color: #1DB954; margin: 0; font-size: 2.2rem; }
+        header p { color: #b3b3b3; margin: 5px 0 0 0; }
+        
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         .library-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -41,86 +30,45 @@
             background-color: #181818;
             border-radius: 8px;
             padding: 16px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s, transform 0.2s;
             border: 1px solid #282828;
-            display: flex;
-            flex-direction: column;
-        }
-        .track-card:hover {
-            background-color: #282828;
-            transform: translateY(-5px);
-        }
-        .cover-frame {
-            position: relative;
-            width: 100%;
-            padding-top: 100%; /* Keeps it a perfect square */
-            margin-bottom: 15px;
-            border-radius: 4px;
-            overflow: hidden;
-            background-color: #2a2a2a;
-        }
-        .cover-frame img {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
-        .track-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin: 0 0 5px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .track-artist {
-            color: #b3b3b3;
-            font-size: 0.9rem;
-            margin: 0 0 15px 0;
-        }
-        .action-row {
-            margin-top: auto;
-            display: flex;
-            gap: 10px;
-        }
-        .btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
             cursor: pointer;
-            text-align: center;
-            font-size: 0.85rem;
-            text-decoration: none;
         }
-        .btn-play {
-            background-color: #1DB954;
-            color: #ffffff;
-        }
-        .btn-play:hover { background-color: #1ed760; }
-        .btn-download {
-            background-color: #333333;
-            color: #ffffff;
-        }
-        .btn-download:hover { background-color: #444444; }
+        .track-card:hover { background-color: #282828; transform: translateY(-5px); }
         
-        /* Audio Player Bar */
-        .player-footer {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background-color: #181818;
-            border-top: 1px solid #282828;
-            padding: 15px 20px;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
+        .cover-frame {
+            position: relative; width: 100%; padding-top: 100%;
+            margin-bottom: 15px; border-radius: 4px; overflow: hidden; background-color: #2a2a2a;
         }
-        .player-footer audio {
-            width: 100%;
-            max-width: 600px;
+        .cover-frame img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .track-title { font-size: 1.1rem; font-weight: bold; margin: 0 0 5px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .track-artist { color: #b3b3b3; font-size: 0.9rem; margin: 0; }
+
+        /* Full Track View Modal */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
         }
+        .modal-content {
+            background-color: #181818; padding: 30px; border-radius: 12px;
+            text-align: center; max-width: 400px; width: 90%; border: 1px solid #282828;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute; top: 15px; right: 20px; font-size: 1.5rem;
+            color: #b3b3b3; cursor: pointer; background: none; border: none;
+        }
+        .close-btn:hover { color: white; }
+        .modal-img { width: 250px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
+        .modal-title { font-size: 1.6rem; margin: 0 0 5px 0; color: #fff; }
+        .modal-artist { color: #b3b3b3; font-size: 1.1rem; margin: 0 0 20px 0; }
+        audio { width: 100%; margin-bottom: 20px; }
+        .btn-download {
+            display: inline-block; width: 100%; background-color: #1DB954; color: white;
+            padding: 12px; border-radius: 4px; text-decoration: none; font-weight: bold; box-sizing: border-box;
+        }
+        .btn-download:hover { background-color: #1ed760; }
     </style>
 </head>
 <body>
@@ -131,16 +79,21 @@
     </header>
 
     <div class="container">
-        <div class="library-grid" id="music-grid">
-            </div>
+        <div class="library-grid" id="music-grid"></div>
     </div>
 
-    <div class="player-footer" id="audioPlayerContainer">
-        <audio id="mainAudioPlayer" controls autoplay></audio>
+    <div class="modal" id="trackModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <img class="modal-img" id="modalImg" src="" alt="Album Art">
+            <div class="modal-title" id="modalTitle">Song Title</div>
+            <div class="modal-artist" id="modalArtist">Artist Name</div>
+            <audio id="modalAudio" controls></audio>
+            <a class="btn-download" id="modalDownload" href="#" target="_blank">💾 Download Track</a>
+        </div>
     </div>
 
     <script>
-        // Immediately fetch library elements on screen load
         window.onload = loadMusicLibrary;
 
         async function loadMusicLibrary() {
@@ -150,39 +103,45 @@
                 const songs = await response.json();
 
                 if (songs.length === 0) {
-                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #b3b3b3;">No music files found in the archive. Check back later!</p>`;
+                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #b3b3b3;">No music files found.</p>`;
                     return;
                 }
 
-                grid.innerHTML = ''; // Wipe loading state
+                grid.innerHTML = '';
                 songs.forEach(song => {
                     const card = document.createElement('div');
                     card.className = 'track-card';
+                    card.onclick = () => openModal(song);
                     card.innerHTML = `
                         <div class="cover-frame">
                             <img src="${song.coverUrl}" alt="Cover Art" onerror="this.src='https://via.placeholder.com/200?text=No+Cover'">
                         </div>
                         <p class="track-title" title="${song.title}">${song.title}</p>
                         <p class="track-artist">${song.artist}</p>
-                        <div class="action-row">
-                            <button class="btn btn-play" onclick="playSong('${song.audioUrl}')">▶ Play</button>
-                            <a class="btn btn-download" href="/api/songs/download/${song._id}" target="_blank">💾 Save</a>
-                        </div>
                     `;
                     grid.appendChild(card);
                 });
             } catch (error) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">Could not sync tracking interface with database server.</p>`;
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">Could not sync tracking interface.</p>`;
             }
         }
 
-        function playSong(audioUrl) {
-            const playerContainer = document.getElementById('audioPlayerContainer');
-            const player = document.getElementById('mainAudioPlayer');
+        function openModal(song) {
+            document.getElementById('modalImg').src = song.coverUrl;
+            document.getElementById('modalTitle').innerText = song.title;
+            document.getElementById('modalArtist').innerText = song.artist;
             
-            player.src = audioUrl;
-            playerContainer.style.display = 'flex';
-            player.play().catch(err => console.log("Playback initialized, click interface context manually."));
+            const audio = document.getElementById('modalAudio');
+            audio.src = song.audioUrl;
+            
+            document.getElementById('modalDownload').href = `/api/songs/download/${song._id}`;
+            document.getElementById('trackModal').style.display = 'flex';
+            audio.play().catch(() => {});
+        }
+
+        function closeModal() {
+            document.getElementById('trackModal').style.display = 'none';
+            document.getElementById('modalAudio').pause();
         }
     </script>
 </body>
