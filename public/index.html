@@ -3,83 +3,462 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sound Scribe - Stream & Download</title>
+    <title>Sound Scribe - Discover Artists & Stream Music</title>
     <style>
+        :root {
+            --bg-master: #0a0a0a;
+            --bg-sidebar: #111111;
+            --bg-card: #181818;
+            --brand-orange: #ffa500;
+            --brand-orange-hover: #cc8400;
+            --text-main: #ffffff;
+            --text-muted: #999999;
+            --border-color: #222222;
+        }
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: var(--bg-master);
+            color: var(--text-main);
             margin: 0; padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
-        header {
-            background-color: #070707;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid #282828;
+
+        /* --- Left Navigation Sidebar --- */
+        .sidebar {
+            width: 240px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-sizing: border-box;
+            flex-shrink: 0;
         }
-        header h1 { color: #1DB954; margin: 0; font-size: 2.2rem; }
-        header p { color: #b3b3b3; margin: 5px 0 0 0; }
-        
-        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .library-grid {
+
+        .logo-section {
+            padding: 0 24px 30px 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-section h2 {
+            color: var(--brand-orange);
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .menu-group {
+            margin-bottom: 25px;
+        }
+
+        .menu-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            padding: 0 24px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: color 0.2s, background-color 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            color: var(--text-main);
+            background-color: rgba(255, 165, 0, 0.05);
+        }
+
+        .menu-item.active {
+            border-left-color: var(--brand-orange);
+            color: var(--brand-orange);
+        }
+
+        .menu-item span {
+            margin-right: 12px;
+        }
+
+        /* --- Main App Frame Layout --- */
+        .main-frame {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Top Universal Header Navbar --- */
+        .top-navbar {
+            height: 70px;
+            background-color: var(--bg-master);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-sizing: border-box;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            background-color: #161616;
+            border: 1px solid var(--border-color);
+            padding: 10px 20px 10px 40px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+        .search-wrapper input:focus {
+            outline: none;
+            border-color: var(--brand-orange);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            color: var(--brand-orange);
+        }
+
+        .btn-upload {
+            background-color: var(--brand-orange);
+            color: black;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-upload:hover {
+            background-color: var(--brand-orange-hover);
+        }
+
+        /* --- Scrollable Content Feed View --- */
+        .content-feed {
+            flex-grow: 1;
+            padding: 30px 40px 120px 40px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        /* --- Promo Banner Carousel Frame --- */
+        .promo-banner {
+            background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 100%), 
+                        url('https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1200') no-repeat center center;
+            background-size: cover;
+            border-radius: 12px;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            border: 1px solid var(--border-color);
+        }
+
+        .banner-text h2 {
+            font-size: 2rem;
+            margin: 0 0 10px 0;
+            font-weight: 800;
+        }
+
+        .banner-text h2 span {
+            color: var(--brand-orange);
+        }
+
+        .banner-text p {
+            color: var(--text-muted);
+            margin: 0 0 20px 0;
+            max-width: 500px;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        .btn-banner-action {
+            background-color: var(--brand-orange);
+            color: black;
+            padding: 14px 28px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        .btn-banner-action:hover {
+            background-color: var(--brand-orange-hover);
+        }
+
+        /* --- Horizontal Categories Filter Row --- */
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .filter-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pill {
+            background-color: #161616;
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .pill:hover, .pill.active {
+            background-color: var(--brand-orange);
+            color: black;
+            border-color: var(--brand-orange);
+        }
+
+        /* --- Structured Section Feed Rows --- */
+        .feed-section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h3 {
+            font-size: 1.4rem;
+            margin: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-all {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .view-all:hover {
+            color: var(--text-main);
+        }
+
+        /* --- Audiomack Style Content Square Grid --- */
+        .music-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
         }
-        .track-card {
-            background-color: #181818;
-            border-radius: 8px;
-            padding: 16px;
-            transition: background-color 0.3s, transform 0.2s;
-            border: 1px solid #282828;
+
+        .music-card {
+            background-color: transparent;
+            border-radius: 6px;
+            transition: transform 0.2s;
             cursor: pointer;
         }
-        .track-card:hover { background-color: #282828; transform: translateY(-5px); }
-        
-        .cover-frame {
-            position: relative; width: 100%; padding-top: 100%;
-            margin-bottom: 15px; border-radius: 4px; overflow: hidden; background-color: #2a2a2a;
-        }
-        .cover-frame img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .track-title { font-size: 1.1rem; font-weight: bold; margin: 0 0 5px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .track-artist { color: #b3b3b3; font-size: 0.9rem; margin: 0; }
 
-        /* Full Track View Modal */
+        .music-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-artwork-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: #222;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .card-artwork-wrapper img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin: 0 0 4px 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-subtext {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* --- Full Screen Overlay Player Modal --- */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.95);
             display: none; justify-content: center; align-items: center; z-index: 1000;
         }
+
         .modal-content {
-            background-color: #181818; padding: 30px; border-radius: 12px;
-            text-align: center; max-width: 400px; width: 90%; border: 1px solid #282828;
+            background-color: #141414; padding: 30px; border-radius: 12px;
+            text-align: center; max-width: 380px; width: 90%; border: 1px solid var(--border-color);
             position: relative;
         }
+
         .close-btn {
-            position: absolute; top: 15px; right: 20px; font-size: 1.5rem;
-            color: #b3b3b3; cursor: pointer; background: none; border: none;
+            position: absolute; top: 15px; right: 20px; font-size: 1.8rem;
+            color: var(--text-muted); cursor: pointer; background: none; border: none;
         }
+
         .close-btn:hover { color: white; }
-        .modal-img { width: 250px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
-        .modal-title { font-size: 1.6rem; margin: 0 0 5px 0; color: #fff; }
-        .modal-artist { color: #b3b3b3; font-size: 1.1rem; margin: 0 0 20px 0; }
-        audio { width: 100%; margin-bottom: 20px; }
-        .btn-download {
-            display: inline-block; width: 100%; background-color: #1DB954; color: white;
-            padding: 12px; border-radius: 4px; text-decoration: none; font-weight: bold; box-sizing: border-box;
+
+        .modal-img { 
+            width: 240px; height: 240px; object-fit: cover; 
+            border-radius: 8px; margin-bottom: 20px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6); 
         }
-        .btn-download:hover { background-color: #1ed760; }
+
+        .modal-title { font-size: 1.4rem; margin: 0 0 5px 0; font-weight: bold; }
+        .modal-artist { color: var(--text-muted); font-size: 1rem; margin: 0 0 25px 0; }
+        
+        .modal-content audio { width: 100%; margin-bottom: 20px; }
+        
+        .btn-download-action {
+            display: inline-block; width: 100%; background-color: var(--brand-orange); color: black;
+            padding: 12px; border-radius: 25px; text-decoration: none; font-weight: bold; box-sizing: border-box;
+            transition: background-color 0.2s;
+        }
+
+        .btn-download-action:hover { background-color: var(--brand-orange-hover); }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>SOUND SCRIBE</h1>
-        <p>Stream and download your favorite tracks freely</p>
-    </header>
+    <div class="sidebar">
+        <div class="logo-section">
+            <h2>soundscribe</h2>
+        </div>
+        
+        <div class="menu-group">
+            <div class="menu-title">Browse</div>
+            <a href="/" class="menu-item active"><span>🔥</span> Discover</a>
+            <a href="#" class="menu-item"><span>📈</span> Charts</a>
+            <a href="#" class="menu-item"><span>🎶</span> Playlists</a>
+            <a href="#" class="menu-item"><span>📢</span> Feed</a>
+        </div>
 
-    <div class="container">
-        <div class="library-grid" id="music-grid"></div>
+        <div class="menu-group">
+            <div class="menu-title">Library</div>
+            <a href="#" class="menu-item"><span>🎧</span> My Library</a>
+        </div>
+    </div>
+
+    <div class="main-frame">
+        
+        <div class="top-navbar">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search for artists, songs, albums...">
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="nav-link">Sign In</a>
+                <a href="/admin.html" class="btn-upload"><span>🧡</span> ADMIN PORTAL</a>
+            </div>
+        </div>
+
+        <div class="content-feed">
+            
+            <div class="promo-banner">
+                <div class="banner-text">
+                    <h2>The music platform <span>empowering artists</span></h2>
+                    <p>Sound Scribe is an independent audio deployment deck hosting modern records directly from distributed cloud repositories.</p>
+                    <a href="/admin.html" class="btn-banner-action">Manage Core Inventory</a>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <div class="pill active">All</div>
+                <div class="pill">Afrosounds</div>
+                <div class="pill">Hip-Hop/Rap</div>
+                <div class="pill">Latin</div>
+                <div class="pill">Jazz/Blues</div>
+                <div class="pill">Caribbean</div>
+                <div class="pill">Pop</div>
+                <div class="pill">R&B</div>
+                <div class="pill">Gospel</div>
+                <div class="pill">Electronic</div>
+                <div class="pill">Rock</div>
+            </div>
+
+            <div class="feed-section">
+                <div class="section-header">
+                    <h3>Trending Songs</h3>
+                    <a href="#" class="view-all">VIEW ALL</a>
+                </div>
+                <div class="music-grid" id="music-grid">
+                    </div>
+            </div>
+
+        </div>
     </div>
 
     <div class="modal" id="trackModal">
@@ -89,7 +468,7 @@
             <div class="modal-title" id="modalTitle">Song Title</div>
             <div class="modal-artist" id="modalArtist">Artist Name</div>
             <audio id="modalAudio" controls></audio>
-            <a class="btn-download" id="modalDownload" href="#" target="_blank">💾 Download Track</a>
+            <a class="btn-download-action" id="modalDownload" href="#" target="_blank">💾 Download Track</a>
         </div>
     </div>
 
@@ -103,26 +482,26 @@
                 const songs = await response.json();
 
                 if (songs.length === 0) {
-                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #b3b3b3;">No music files found.</p>`;
+                    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">No active tracks inside remote cloud database architecture.</p>`;
                     return;
                 }
 
                 grid.innerHTML = '';
                 songs.forEach(song => {
                     const card = document.createElement('div');
-                    card.className = 'track-card';
+                    card.className = 'music-card';
                     card.onclick = () => openModal(song);
                     card.innerHTML = `
-                        <div class="cover-frame">
+                        <div class="card-artwork-wrapper">
                             <img src="${song.coverUrl}" alt="Cover Art" onerror="this.src='https://via.placeholder.com/200?text=No+Cover'">
                         </div>
-                        <p class="track-title" title="${song.title}">${song.title}</p>
-                        <p class="track-artist">${song.artist}</p>
+                        <p class="card-title" title="${song.title}">${song.title}</p>
+                        <p class="card-subtext">${song.artist}</p>
                     `;
                     grid.appendChild(card);
                 });
             } catch (error) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">Could not sync tracking interface.</p>`;
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">Synchronization pipeline error encountered while fetching metadata records.</p>`;
             }
         }
 
