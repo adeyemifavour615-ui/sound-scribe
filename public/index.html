@@ -386,6 +386,10 @@
             display: inline-block; width: 100%; background-color: var(--brand-orange); color: black;
             padding: 12px; border-radius: 25px; text-decoration: none; font-weight: bold; box-sizing: border-box;
             transition: background-color 0.2s;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            font-size: 0.95rem;
         }
 
         .btn-download-action:hover { background-color: var(--brand-orange-hover); }
@@ -468,12 +472,22 @@
             <div class="modal-title" id="modalTitle">Song Title</div>
             <div class="modal-artist" id="modalArtist">Artist Name</div>
             <audio id="modalAudio" controls></audio>
-            <a class="btn-download-action" id="modalDownload" href="#" target="_blank">💾 Download Track</a>
+            <button class="btn-download-action" id="modalDownload" onclick="downloadAndCacheTrack()">💾 Download & Keep Offline</button>
         </div>
     </div>
 
     <script>
-        let allSongs = []; // Global pointer variable cache
+        // --- Service Worker Installation Registration ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Offline System Worker Ready.'))
+                    .catch(err => console.log('Offline worker error:', err));
+            });
+        }
+
+        let allSongs = []; 
+        let currentSong = null;
 
         window.onload = loadMusicLibrary;
 
@@ -483,7 +497,17 @@
                 allSongs = await response.json();
                 displaySongs(allSongs);
             } catch (error) {
-                document.getElementById('music-grid').innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">Synchronization pipeline error encountered while fetching metadata records.</p>`;
+                // Offline fallback: try to load data from Service Worker Cache if network fails
+                if ('caches' in window) {
+                    caches.match('/api/songs').then(async (cachedResponse) => {
+                        if (cachedResponse) {
+                            allSongs = await cachedResponse.json();
+                            displaySongs(allSongs);
+                        } else {
+                            document.getElementById('music-grid').innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ff5555;">You are currently offline, and no cached media tracks were found.</p>`;
+                        }
+                    });
+                }
             }
         }
 
@@ -511,7 +535,6 @@
         }
 
         function filterGenre(genre, element) {
-            // Manage pills CSS visual classes highlight
             document.querySelectorAll('.pill').forEach(pill => pill.classList.remove('active'));
             element.classList.add('active');
             
@@ -526,6 +549,7 @@
         }
 
         function openModal(song) {
+            currentSong = song;
             document.getElementById('modalImg').src = song.coverUrl;
             document.getElementById('modalTitle').innerText = song.title;
             document.getElementById('modalArtist').innerText = song.artist;
@@ -533,9 +557,39 @@
             const audio = document.getElementById('modalAudio');
             audio.src = song.audioUrl;
             
-            document.getElementById('modalDownload').href = `/api/songs/download/${song._id}`;
             document.getElementById('trackModal').style.display = 'flex';
             audio.play().catch(() => {});
+        }
+
+        async function downloadAndCacheTrack() {
+            if (!currentSong) return;
+            
+            const downloadUrl = `/api/songs/download/${currentSong._id}`;
+            const downloadBtn = document.getElementById('modalDownload');
+            
+            downloadBtn.innerText = "⏳ Saving track...";
+
+            try {
+                if ('caches' in window) {
+                    const cache = await caches.open('soundscribe-v1');
+                    await cache.add(currentSong.audioUrl);
+                    await cache.add(currentSong.coverUrl);
+                }
+
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                downloadBtn.innerText = "✅ Saved Offline!";
+                setTimeout(() => { downloadBtn.innerText = "💾 Download & Keep Offline"; }, 2000);
+            } catch (err) {
+                console.error(err);
+                downloadBtn.innerText = "❌ Offline Save Error";
+                setTimeout(() => { downloadBtn.innerText = "💾 Download & Keep Offline"; }, 2000);
+            }
         }
 
         function closeModal() {
